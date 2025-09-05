@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Usuarios – página {{ page }}{% endblock %}
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h1 class="h3 m-0">Usuarios (página {{ page }})</h1>
+  <form method="get" class="d-flex gap-2">
+    <input type="hidden" name="page" value="1">
+    <label class="form-label m-0 align-self-center">Tamaño pág.</label>
+    <select class="form-select" name="page_size" onchange="this.form.submit()">
+      {% for s in [3,6,9,12] %}
+        <option value="{{ s }}" {% if s == page_size %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+{% if not users %}
+  <div class="alert alert-warning">No hay usuarios en esta página.</div>
+{% else %}
+  <div class="row g-3">
+    {% for u in users %}
+    <div class="col-12 col-sm-6 col-lg-4">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ u.picture.medium }}" class="card-img-top" alt="Foto de {{ u.name.title }} {{ u.name.first }} {{ u.name.last }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ u.name.title }} {{ u.name.first }} {{ u.name.last }}</h5>
+          <ul class="list-unstyled small mb-3">
+            <li><strong>Usuario:</strong> {{ u.login.username }}</li>
+            <li><strong>Edad:</strong> {{ u.dob.age }}</li>
+            <li><strong>Ubicación:</strong> {{ u.location.city }}, {{ u.location.state }}, {{ u.location.country }}</li>
+            <li><strong>Zona horaria:</strong> {{ u.location.timezone.offset }} ({{ u.location.timezone.description }})</li>
+          </ul>
+          <a class="btn btn-primary w-100" href="{% url 'user_detail' u.login.uuid %}?page={{ page }}&page_size={{ page_size }}">
+            Ver detalles
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+        <a class="page-link" href="?page={{ prev_page }}&page_size={{ page_size }}">Anterior</a>
+      </li>
+      <li class="page-item"><span class="page-link">Página {{ page }}</span></li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ next_page }}&page_size={{ page_size }}">Siguiente</a>
+      </li>
+    </ul>
+  </nav>
+{% endif %}
+{% endblock %}

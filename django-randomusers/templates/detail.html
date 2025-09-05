@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Detalle de usuario{% endblock %}
+{% block content %}
+<a class="btn btn-link px-0" href="/?page={{ page }}&page_size={{ page_size }}">← Volver a la lista</a>
+
+<div class="row g-4 mt-1">
+  <div class="col-12 col-md-4">
+    <div class="card shadow-sm">
+      <img src="{{ u.picture.large }}" class="card-img-top" alt="Foto de {{ u.name.title }} {{ u.name.first }} {{ u.name.last }}">
+      <div class="card-body d-flex gap-2 justify-content-center">
+        <img src="{{ u.picture.medium }}" class="rounded" style="width:64px;height:64px" alt="Medium">
+        <img src="{{ u.picture.thumbnail }}" class="rounded" style="width:64px;height:64px" alt="Thumb">
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="h4">{{ u.name.title }} {{ u.name.first }} {{ u.name.last }}</h2>
+        <div class="row">
+          <div class="col-sm-6">
+            <ul class="list-unstyled mb-0">
+              <li><strong>Género:</strong> {{ u.gender }}</li>
+              <li><strong>Edad:</strong> {{ u.dob.age }} (Nació: {{ u.dob.date|slice:":10" }})</li>
+              <li><strong>Usuario:</strong> {{ u.login.username }}</li>
+              <li><strong>UUID:</strong> {{ u.login.uuid }}</li>
+              <li><strong>Nacionalidad:</strong> {{ u.nat }}</li>
+              <li><strong>Registrado:</strong> {{ u.registered.date|slice:":10" }} ({{ u.registered.age }} años)</li>
+            </ul>
+          </div>
+          <div class="col-sm-6">
+            <ul class="list-unstyled mb-0">
+              <li><strong>Email:</strong> {{ u.email }}</li>
+              <li><strong>Teléfono:</strong> {{ u.phone }}</li>
+              <li><strong>Celular:</strong> {{ u.cell }}</li>
+              <li><strong>ID Doc:</strong> {% if u.id.name %}{{ u.id.name }} {{ u.id.value }}{% else %}N/D{% endif %}</li>
+            </ul>
+          </div>
+        </div>
+        <hr>
+        <h3 class="h5">Ubicación</h3>
+        <p class="mb-1">
+          {{ u.location.street.number }} {{ u.location.street.name }},
+          {{ u.location.city }}, {{ u.location.state }}, {{ u.location.country }},
+          CP {{ u.location.postcode }}
+        </p>
+        <p class="mb-1"><strong>Coordenadas:</strong> {{ u.location.coordinates.latitude }}, {{ u.location.coordinates.longitude }}</p>
+        <p class="mb-0"><strong>Zona horaria:</strong> {{ u.location.timezone.offset }} ({{ u.location.timezone.description }})</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
